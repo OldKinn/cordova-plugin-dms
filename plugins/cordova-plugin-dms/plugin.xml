@@ -12,5 +12,15 @@
         </config-file>
         <config-file parent="/*" target="AndroidManifest.xml"></config-file>
         <source-file src="src/android/DMSPlugin.java" target-dir="src/com/chinacreator/plugin/zzzhzf/persion" />
+        <source-file src="src/android/Library/FileUtils.java" target-dir="src/com/Library" />
+        <source-file src="src/android/Library/IDCardDate.java" target-dir="src/com/Library" />
+        <source-file src="src/android/Library/IDCardException.java" target-dir="src/com/Library" />
+        <source-file src="src/android/Library/IDCardManager.java" target-dir="src/com/Library" />
+        <source-file src="src/android/Library/IDCardMsg.java" target-dir="src/com/Library" />
+        <source-file src="src/android/Library/IDCardRecognition.java" target-dir="src/com/Library" />
+        <source-file src="src/android/jni/JniCall.java" target-dir="src/jni" />
+        <framework src="src/dms.gradle" custom="true" type="gradleReference" />
+        <hook type="after_plugin_install" src="scripts/afterPluginInstall.js" />
+        <hook type="before_plugin_uninstall" src="scripts/beforePluginUninstall.js" />
     </platform>
 </plugin>

@@ -9,6 +9,7 @@
         "clean": "cordova clean android",
         "plugin:add": "plugman install -d --platform android --project platforms/android --plugin plugins/cordova-plugin-dms",
         "plugin:del": "plugman uninstall --platform android --project platforms/android --plugin plugins/cordova-plugin-dms",
+        "plugin": "yarn plugin:del && yarn plugin:add",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Apache Cordova Team",
