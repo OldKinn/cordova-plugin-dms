@@ -1,5 +1,9 @@
 var exec = require('cordova/exec');
 
-exports.coolMethod = function (arg0, success, error) {
-    exec(success, error, 'DMSPlugin', 'coolMethod', [arg0]);
+exports.startReading = function (success, error) {
+    exec(success, error, 'DMSPlugin', 'startReading');
 };
+
+exports.stopReading = function (success, error) {
+    exec(success, error, 'DMSPlugin', 'stopReading');
+}

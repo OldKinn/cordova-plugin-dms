@@ -40,12 +40,20 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-
-        cordova.plugin.dms.coolMethod('xxxx', function(data) {
-            alert(data);
-        }, function(message) {
-            alert(message);
-        });
+        document.getElementById('start').addEventListener('click', function() {
+            cordova.plugin.dms.startReading(function(data) {
+                alert(JSON.stringify(data));
+            }, function(message) {
+                alert(message);
+            });
+        })
+        document.getElementById('end').addEventListener('click', function() {
+            cordova.plugin.dms.stopReading(function(data) {
+                alert(JSON.stringify(data));
+            }, function(message) {
+                alert(message);
+            });
+        })
     }
 };
 
