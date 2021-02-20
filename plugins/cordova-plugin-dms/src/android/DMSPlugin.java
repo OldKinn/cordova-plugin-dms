@@ -12,10 +12,13 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import com.Library.IDCardMsg;
 import com.Library.IDCardRecognition;
+
+import android.content.ComponentName;
+import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * This class echoes a string called from JavaScript.
@@ -23,14 +26,20 @@ import com.Library.IDCardRecognition;
 public class DMSPlugin extends CordovaPlugin {
 
     private IDCardRecognition mIDCardRecognition;
+    private CallbackContext callbackContextx;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+        this.callbackContextx = callbackContext;
         if (action.equals("startReading")) {
             this.startReading(callbackContext);
             return true;
         } else if (action.equals("stopReading")) {
             this.stopReading(callbackContext);
+            return true;
+        } else if (action.equals("startSignActive")) {
+            JSONObject obj = args.optJSONObject(0);
+            this.startSignActive(obj, callbackContext);
             return true;
         }
         return false;
@@ -102,5 +111,41 @@ public class DMSPlugin extends CordovaPlugin {
             }
         }
         return "data:image/jpg;base64," + result;
+    }
+    // 签名功能
+    private void startSignActive(JSONObject fileObj, CallbackContext callbackContext) throws JSONException {
+        Intent intent = new Intent();
+        ComponentName cn = new ComponentName("com.example.fenglinsignapp", "com.example.fenglinsignapp.MainActivity");
+        intent.setComponent(cn);
+        intent.putExtra("url", fileObj.getString("url"));
+        intent.putExtra("name", fileObj.getString("name"));
+        intent.putExtra("downloadPath", fileObj.getString("downloadPath"));
+        intent.putExtra("isReadOnly", fileObj.getString("isReadOnly"));
+        intent.setAction("android.intent.action.MAIN");
+        cordova.startActivityForResult(this,intent,1);
+    }
+    //onActivityResult为第二个Activity执行完后的回调接收方法
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        switch (resultCode) { //resultCode为回传的标记
+            case 1:
+                Bundle b=data.getExtras();  //data为第二个Activity中回传的Intent
+                String pdfPath=b.getString("pdf");//pdf即为回传的值
+                if(pdfPath == null) {
+                    return;
+                }
+                try {
+                    JSONObject result = new JSONObject();
+                    result.put("success", true);
+                    result.put("pdfPath", pdfPath);
+                    this.callbackContextx.success(result);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    this.callbackContextx.error(e.getMessage());
+                }
+                break;
+            default:
+                break;
+        }
     }
 }
